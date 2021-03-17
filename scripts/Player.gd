@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+signal died
+
 # -- Variables --
 
 export var gravity : float = 9.8
@@ -54,3 +56,7 @@ func _physics_process(delta):
 	
 	# Applies the velocity.
 	velocity = move_and_slide(velocity, Vector2(0.0, -1.0))
+
+
+func on_touched_spike():
+	emit_signal("died")

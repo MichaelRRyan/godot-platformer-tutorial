@@ -1,78 +1,15 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://assets/images/sprite_sheet.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/Platform.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scenes/Player.gd" type="Script" id=3]
-
-[sub_resource type="AtlasTexture" id=1]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 1 )
-region = Rect2( 64, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 1 )
-region = Rect2( 80, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 1 )
-region = Rect2( 32, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 1 )
-region = Rect2( 48, 16, 16, 16 )
-
-[sub_resource type="SpriteFrames" id=3]
-animations = [ {
-"frames": [ SubResource( 1 ), SubResource( 2 ) ],
-"loop": true,
-"name": "idle",
-"speed": 2.0
-}, {
-"frames": [ SubResource( 5 ), SubResource( 6 ) ],
-"loop": true,
-"name": "jumping",
-"speed": 2.0
-}, {
-"frames": [ SubResource( 7 ), SubResource( 8 ) ],
-"loop": true,
-"name": "running",
-"speed": 6.0
-} ]
-
-[sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 4, 8.013 )
+[ext_resource path="res://Scenes/Spike.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/Gameplay.gd" type="Script" id=4]
 
 [node name="Gameplay" type="Node2D"]
+script = ExtResource( 4 )
 
-[node name="Player" type="KinematicBody2D" parent="."]
-position = Vector2( 40.4358, 19.8362 )
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_group_": true
-}
-gravity = 200.0
-jump_speed = 130.0
-max_speed = 60.0
-acceleration = 150.0
-deceleration = 150.0
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="Player"]
-frames = SubResource( 3 )
-animation = "idle"
-frame = 1
-playing = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-visible = false
-position = Vector2( -1, 0 )
-shape = SubResource( 4 )
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 47.5176, 33.8027 )
 
 [node name="Platform" parent="." instance=ExtResource( 2 )]
 position = Vector2( 45, 64 )
@@ -84,3 +21,6 @@ position = Vector2( 100, 100 )
 position = Vector2( 42.2168, 45.1899 )
 current = true
 zoom = Vector2( 0.25, 0.25 )
+
+[node name="Spike" parent="." instance=ExtResource( 3 )]
+[connection signal="died" from="Player" to="." method="_on_Player_died"]
