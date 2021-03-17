@@ -26,5 +26,5 @@ zoom = Vector2( 0.25, 0.25 )
 [node name="Spike" parent="." instance=ExtResource( 3 )]
 
 [node name="Enemy" parent="." instance=ExtResource( 5 )]
-position = Vector2( 71.5005, 42.2074 )
+position = Vector2( 118.17, 70.3774 )
 [connection signal="died" from="Player" to="." method="_on_Player_died"]

@@ -14,15 +14,7 @@ func _physics_process(delta):
 	
 	velocity.y += gravity * delta
 	
-	if $WallCheckRay.is_colliding():
-		var collider = $WallCheckRay.get_collider()
-		
-		if collider.is_in_group("player"):
-			collider.take_damage()
-		else:
-			switch_direction()
-			
-	elif !$GroundCheckRay.is_colliding():
+	if $WallCheckRay.is_colliding() or !$GroundCheckRay.is_colliding():
 		switch_direction()
 	
 	velocity = move_and_slide(velocity)
@@ -33,3 +25,14 @@ func switch_direction():
 	$WallCheckRay.cast_to.x *= -1
 	$GroundCheckRay.cast_to.x *= -1
 	$AnimatedSprite.flip_h = velocity.x < 0.0
+
+
+func _on_AttackArea_body_entered(body):
+	if body.is_in_group("player"):
+		body.take_damage()
+
+
+func _on_DamageArea_body_entered(body):
+	if body.is_in_group("player"):
+		queue_free()
+		body.bounce()

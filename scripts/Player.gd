@@ -60,3 +60,7 @@ func _physics_process(delta):
 
 func take_damage():
 	emit_signal("died")
+
+
+func bounce():
+	velocity.y = -jump_speed * 0.6
