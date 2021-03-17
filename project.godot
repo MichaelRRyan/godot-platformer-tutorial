@@ -16,6 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="PlatformerTutorial"
+run/main_scene="res://Scenes/Gameplay.tscn"
 config/icon="res://assets/images/icon.png"
 
 [rendering]
