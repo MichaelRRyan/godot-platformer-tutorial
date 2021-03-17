@@ -33,6 +33,9 @@ __meta__ = {
 }
 gravity = 200.0
 jump_speed = 130.0
+max_speed = 60.0
+acceleration = 150.0
+deceleration = 150.0
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Player"]
 frames = SubResource( 3 )
@@ -44,10 +47,10 @@ position = Vector2( -1, 0 )
 shape = SubResource( 4 )
 
 [node name="Platform" parent="." instance=ExtResource( 2 )]
-position = Vector2( 43.1335, 74.5998 )
+position = Vector2( 45, 64 )
 
 [node name="Platform2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 108.136, 111.621 )
+position = Vector2( 100, 100 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 42.2168, 45.1899 )

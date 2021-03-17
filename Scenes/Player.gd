@@ -4,7 +4,9 @@ extends KinematicBody2D
 
 export var gravity : float = 9.8
 export var jump_speed : float = 10
-export var speed : float = 50
+export var max_speed : float = 50
+export var acceleration : float = 50
+export var deceleration : float = 50
 
 var velocity = Vector2()
 
@@ -24,15 +26,21 @@ func _physics_process(delta):
 	
 	# Right movement.
 	if right and not left:
-		velocity.x = speed
+		velocity.x += acceleration * delta
+		$AnimatedSprite.flip_h = false
 	
 	# Left movement.
 	elif left and not right:
-		velocity.x = -speed
+		velocity.x -= acceleration * delta
+		$AnimatedSprite.flip_h = true		
 	
 	# No movement.
 	else:
-		velocity.x = 0.0
+		velocity.x -= min(deceleration * delta, abs(velocity.x)) * sign(velocity.x)
+		
+	# Clamps the movement to a max speed.
+	if abs(velocity.x) > max_speed:
+		velocity.x = max_speed * sign(velocity.x)
 	
 	# Applies the velocity.
 	velocity = move_and_slide(velocity, Vector2(0.0, -1.0))
