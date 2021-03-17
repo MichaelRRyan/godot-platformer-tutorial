@@ -58,5 +58,5 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity, Vector2(0.0, -1.0))
 
 
-func on_touched_spike():
+func take_damage():
 	emit_signal("died")
