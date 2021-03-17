@@ -8,6 +8,11 @@ var velocity = Vector2()
 
 func _ready():
 	velocity.x = speed
+	
+	var enemies = get_tree().get_nodes_in_group("enemy")
+	
+	for enemy in enemies:
+		$WallCheckRay.add_exception(enemy)
 
 
 func _physics_process(delta):

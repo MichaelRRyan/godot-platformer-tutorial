@@ -63,4 +63,4 @@ func take_damage():
 
 
 func bounce():
-	velocity.y = -jump_speed * 0.6
+	velocity.y = -jump_speed * 0.8
