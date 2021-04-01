@@ -34,7 +34,10 @@ func switch_direction():
 
 func _on_AttackArea_body_entered(body):
 	if body.is_in_group("player"):
-		body.take_damage()
+		var direction = (body.position - position).normalized()
+		var knockback = Vector2(direction.x * 50, -50)
+		
+		body.take_damage(knockback)
 
 
 func _on_DamageArea_body_entered(body):

@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/Platform.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Spike.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/Gameplay.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/Enemy.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scripts/HealthBar.gd" type="Script" id=6]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.172549, 0.635294, 0.188235, 1 )
@@ -49,7 +50,9 @@ custom_styles/bg = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 0 )
 max_value = 1.0
 value = 1.0
+script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="damage_taken" from="Player" to="CanvasLayer/HealthBar" method="_on_Player_damage_taken"]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
