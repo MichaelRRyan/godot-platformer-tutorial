@@ -1,19 +1,23 @@
 extends KinematicBody2D
 
 signal died
-signal damage_taken
+signal health_changed
 
-# -- Variables --
+# -- Exported Variables --
 
-export var gravity : float = 9.8
-export var jump_speed : float = 10
-export var max_speed : float = 50
-export var acceleration : float = 50
-export var deceleration : float = 50
-export var max_health : float = 4
+export(float) var gravity = 9.8
+export(float) var jump_speed = 10
+export(float) var max_speed = 50
+export(float) var acceleration = 50
+export(float) var deceleration = 50
+export(float) var max_health = 4
+export(int) var max_jumps = 2
+
+# -- Regular Variables --
 
 var velocity = Vector2()
 var health
+var jumps = 0
 
 
 func _ready():
@@ -25,22 +29,22 @@ func _physics_process(delta):
 	# Adds gravity.
 	velocity.y = velocity.y + gravity * delta
 	
-	# Handles horizontal movement
-	var left = Input.is_action_pressed("move_left")
-	var right = Input.is_action_pressed("move_right")
+	handle_movement(delta)
+	handle_jumping()
 	
-	# Right movement.
-	if right and not left:
-		velocity.x += acceleration * delta
-		$AnimatedSprite.flip_h = false
-		
-		if is_on_floor():
-			$AnimatedSprite.play("running")		
+	# Applies the velocity.
+	velocity = move_and_slide(velocity, Vector2.UP)
+
+
+func handle_movement(delta):
 	
-	# Left movement.
-	elif left and not right:
-		velocity.x -= acceleration * delta
-		$AnimatedSprite.flip_h = true
+	var input = Input.get_action_strength("move_right")
+	input -= Input.get_action_strength("move_left")
+	
+	# Movement.
+	if input != 0.0:
+		velocity.x += acceleration * input * delta
+		$AnimatedSprite.flip_h = input < 0
 		
 		if is_on_floor():
 			$AnimatedSprite.play("running")			
@@ -51,18 +55,23 @@ func _physics_process(delta):
 		
 		if is_on_floor():
 			$AnimatedSprite.play("idle")
-		
+	
 	# Clamps the movement to a max speed.
 	if abs(velocity.x) > max_speed:
 		velocity.x = max_speed * sign(velocity.x)
-		
-	# Handles jumping.
-	if is_on_floor() and Input.is_action_just_pressed("jump"):
-		velocity.y = -jump_speed
-		$AnimatedSprite.play("jumping")
+
+
+func handle_jumping():
 	
-	# Applies the velocity.
-	velocity = move_and_slide(velocity, Vector2(0.0, -1.0))
+	# Reset jumps.
+	if jumps > 0 and is_on_floor():
+		jumps = 0
+	
+	if Input.is_action_just_pressed("jump"):
+		if is_on_floor() or jumps < max_jumps:
+			velocity.y = -jump_speed
+			$AnimatedSprite.play("jumping")
+			jumps += 1
 
 
 func take_damage(knockback):
@@ -74,7 +83,7 @@ func take_damage(knockback):
 		else:
 			$DamageCooldown.start()
 			velocity = knockback
-			emit_signal("damage_taken", health / max_health)
+			emit_signal("health_changed", health / max_health)
 			
 
 func is_falling():
@@ -83,3 +92,8 @@ func is_falling():
 
 func bounce():
 	velocity.y = -jump_speed * 0.8
+
+
+func heal(amount):
+	health = min(health + amount, max_health)
+	emit_signal("health_changed", health / max_health)
